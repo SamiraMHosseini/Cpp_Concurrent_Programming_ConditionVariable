@@ -1,14 +1,14 @@
 # Practice-Multithreading
-​CPP_Multithreaded_Practice_RecursiveLock ​
 
-A recursive mutex in C++ is a type of mutex (short for "mutual exclusion") that allows the same thread to lock it multiple times, whereas a non-recursive mutex will deadlock if the same thread tries to lock it more than once.
 
-A mutex is used in multithreaded programming to ensure that only one thread at a time can access a shared resource, such as a data structure or a file, to prevent race conditions and other synchronization issues. By allowing the same thread to lock a recursive mutex multiple times, it allows the thread to perform a series of operations that require exclusive access to the resource, without having to worry about releasing the lock prematurely.
+A condition_variable is a synchronization primitive in the C++ Standard Library used for communication between threads in concurrent programming. It is typically used in combination with a mutex to provide a mechanism for one thread to wait for a condition to be met by another thread.
 
-In C++, you can create a recursive mutex using std::recursive_mutex. To use it, you lock the mutex using lock() method and release it using unlock().
+The basic usage pattern for a condition_variable is as follows:
 
-Until the lock count of a recursive mutex reaches zero, meaning that all locks have been released, no other thread can access the resource protected by the mutex. This ensures that the shared resource can only be accessed by one thread at a time, avoiding synchronization problems and race conditions.
-
-Each time a thread locks a recursive mutex, the lock count is incremented, and each time the thread unlocks the mutex, the lock count is decremented. The mutex is only released when the lock count reaches zero, meaning that all locks have been released. At this point, other threads are free to lock the mutex and access the shared resource.
-
-In this way, a recursive mutex provides exclusive access to a shared resource, ensuring that multiple threads can access the resource safely and efficiently, even if the same thread needs to lock and unlock the mutex multiple times.
+A thread locks a mutex to access a shared resource.
+The thread checks the state of the shared resource and determines whether it meets the desired condition.
+If the condition is not met, the thread calls wait on the condition_variable, passing the locked mutex as a parameter.
+The wait call atomically releases the lock on the mutex and blocks the thread until another thread calls notify_one or notify_all on the same condition_variable.
+A different thread locks the same mutex, modifies the shared resource so that the desired condition is met, and then calls notify_one or notify_all on the condition_variable.
+The first thread is unblocked, reacquires the lock on the mutex, and continues execution.
+The condition_variable is a powerful tool for coordinating the behavior of multiple threads, and is used in many synchronization algorithms.
